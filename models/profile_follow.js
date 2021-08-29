@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const FollowSchema = Schema({
+const ProfileFollowSchema = Schema({
     "followingProfileID": {
         type: Schema.Types.ObjectId,
         ref: 'profile',
@@ -18,4 +18,4 @@ const FollowSchema = Schema({
     "state": Boolean
 })
 
-module.exports = mongoose.model('follow', FollowSchema)
+module.exports = mongoose.model('profile_follow', ProfileFollowSchema)

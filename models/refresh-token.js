@@ -5,7 +5,8 @@ const Schema = mongoose.Schema
 
 const RefreshTokenSchema = Schema({
     "token": String,
-    "createdAt": Date
+    "createdAt": Date,
+    "state": Boolean
 })
 
 module.exports = mongoose.model('refreshtoken', RefreshTokenSchema)
