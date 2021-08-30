@@ -12,7 +12,7 @@ function authenticateToken(req, res, next) {
             req.user = user
             next()
         })
-    } catch (ex) {
+    } catch (error) {
         return res.sendStatus(401)
     }
 }

@@ -48,6 +48,7 @@ const uploadProfileBanner = multer({ storage: storage, limits: limitProfileBanne
 const authMiddleware = require('../middlewares/validateToken')
 const authValidation = require('../middlewares/validateAuth')
 const userValidation = require('../middlewares/validateUser')
+const profileValidation = require('../middlewares/validateProfile')
 const fileValidation = require('../middlewares/validateFile')
 
 router.post('/auth', authValidation.authValidate, AuthController.auth)
@@ -60,12 +61,12 @@ router.get('/users', authMiddleware, UserController.users)
 router.put('/user/:id/update', authMiddleware, userValidation.noPasswordValidate, UserController.updateUser)
 router.put('/user-email/update', authMiddleware, userValidation.updateEmailValidate, UserController.updateUserEmail)
 router.put('/user-password/update', authMiddleware, userValidation.updatePasswordValidate, UserController.updateUserPassword)
-router.delete('/user/delete', authMiddleware, UserController.deleteUser)
+router.delete('/user/delete', authMiddleware, userValidation.deleteUserValidate, UserController.deleteUser)
 
-router.post('/profile/new', authMiddleware, ProfileController.newProfile)
+router.post('/profile/new', authMiddleware, profileValidation.fullValidate, ProfileController.newProfile)
 router.get('/profile/:id', authMiddleware, ProfileController.profile)
 router.get('/profiles', authMiddleware, ProfileController.profiles)
-router.put('/profile/:id/update', authMiddleware, ProfileController.updateProfile)
+router.put('/profile/:id/update', profileValidation.fullValidate, authMiddleware, ProfileController.updateProfile)
 router.delete('/profile/:id/delete', authMiddleware, ProfileController.deleteProfile)
 
 router.post('/profile-follow/new', authMiddleware, ProfileFollowController.newProfileFollow)

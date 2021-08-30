@@ -10,10 +10,10 @@ const controller = {
         profileFollow.followerProfileID = body.followerProfileID
         profileFollow.createdAt = Date.now()
         profileFollow.state = body.state
-        profileFollow.save((err, profileSuccess) => {
-            if (!profileSuccess) return res.status(400).send({ message: 'No se pudo seguir el perfil.' })
+        profileFollow.save((err, profileFollowSuccess) => {
+            if (!profileFollowSuccess) return res.status(400).send({ message: 'No se pudo seguir el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ message: 'Se empezo a seguir el perfil correctamente.' })
+            return res.status(200).send({ profileFollow: profileFollowSuccess, message: 'Se empezo a seguir el perfil correctamente.' })
         })
     },
     profileFollow: (req, res) => {
@@ -45,7 +45,7 @@ const controller = {
         ProfileFollow.findByIdAndDelete(profileFollowID, (err, profileFollowSuccess) => {
             if (!profileFollowSuccess) return res.status(400).send({ message: 'No estas siguiendo a este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ profileFollow: profileFollowSuccess })
+            return res.status(200).send({ profileFollow: profileFollowSuccess, message: 'Se dejo de seguir el perfil correctamente.' })
         })
     }
 }

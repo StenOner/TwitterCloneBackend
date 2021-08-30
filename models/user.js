@@ -14,7 +14,10 @@ const UserSchema = Schema({
         required: true,
         select: false
     },
-    "userName": String,
+    "userName": {
+        type: String,
+        required: true
+    },
     "createdAt": Date,
     "state": Boolean
 })

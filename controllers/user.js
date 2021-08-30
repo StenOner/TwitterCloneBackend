@@ -15,7 +15,7 @@ const controller = {
         user.save((err, userSuccess) => {
             if (!userSuccess) return res.status(400).send({ message: 'No se pudo crear el usuario.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ message: 'Usuario creado correctamente.' })
+            return res.status(200).send({ user: userSuccess, message: 'Usuario creado correctamente.' })
         })
     },
     user: (req, res) => {
@@ -43,7 +43,7 @@ const controller = {
         User.findByIdAndUpdate(userID, update, (err, userSuccess) => {
             if (!userSuccess) return res.status(400).send({ message: 'No existe el usuario.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ user: userSuccess })
+            return res.status(200).send({ user: userSuccess, message: 'Usuario actualizado correctamente.' })
         })
     },
     updateUserEmail: (req, res) => {
@@ -53,7 +53,7 @@ const controller = {
         User.findByIdAndUpdate(userID, { email: newEmail }, { select: '-_id email' }, (err, userSuccess) => {
             if (!userSuccess) return res.status(400).send({ message: 'No existe el usuario.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ message: 'Actualizado correctamente.' })
+            return res.status(200).send({ user: userSuccess, message: 'Correo actualizado correctamente.' })
         })
     },
     updateUserPassword: (req, res) => {
@@ -64,7 +64,7 @@ const controller = {
         User.findOneAndUpdate({ email: email, password: oldPassword }, { password: newPassword }, { select: '-_id email' }, (err, userSuccess) => {
             if (!userSuccess) return res.status(400).send({ message: 'La contraseña o el correo es incorrecto.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ message: 'Actualizado correctamente.' })
+            return res.status(200).send({ user: userSuccess, message: 'Contraseña actualizada correctamente.' })
         })
     },
     deleteUser: (req, res) => {
@@ -74,7 +74,7 @@ const controller = {
         User.findOneAndDelete({ email: email, password: password }, (err, userSuccess) => {
             if (!userSuccess) return res.status(400).send({ message: 'No existe el usuario.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ user: userSuccess })
+            return res.status(200).send({ user: userSuccess, message: 'Usuario eliminado correctamente.' })
         })
     }
 }

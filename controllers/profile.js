@@ -17,7 +17,7 @@ const controller = {
         profile.save((err, profileSuccess) => {
             if (!profileSuccess) return res.status(400).send({ message: 'No se pudo crear el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ message: 'Perfil creado correctamente.' })
+            return res.status(200).send({ profile: profileSuccess, message: 'Perfil creado correctamente.' })
         })
     },
     profile: (req, res) => {
@@ -47,7 +47,7 @@ const controller = {
         Profile.findByIdAndUpdate(profileID, update, (err, profileSuccess) => {
             if (!profileSuccess) return res.status(400).send({ message: 'No existe el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ profile: profileSuccess })
+            return res.status(200).send({ profile: profileSuccess, message: 'Perfil actualizado correctamente.' })
         }).populate({ path: 'userID' })
     },
     deleteProfile: (req, res) => {
@@ -55,7 +55,7 @@ const controller = {
         Profile.findByIdAndDelete(profileID, (err, profileSuccess) => {
             if (!profileSuccess) return res.status(400).send({ message: 'No existe el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ profile: profileSuccess })
+            return res.status(200).send({ profile: profileSuccess, message: 'Perfil eliminado correctamente.' })
         })
     }
 }
