@@ -29,9 +29,21 @@ const filterProfilePicture = (req, file, cb) => {
     cb(null, true)
 }
 const limitProfilePicture = {
+    fileSize: 5 * 1024 * 1024
+}
+const filterProfileBanner = (req, file, cb) => {
+    const acceptedExtensions = ['jpeg', 'jpg', 'png', 'gif']
+    const name = file.originalname
+    const index = name.lastIndexOf('.')
+    const fileExt = index > 0 ? name.substring(index + 1) : ''
+    if (!acceptedExtensions.includes(fileExt.toLowerCase())) cb('La extension no es soportada.')
+    cb(null, true)
+}
+const limitProfileBanner = {
     fileSize: 20 * 1024 * 1024
 }
 const uploadProfilePicture = multer({ storage: storage, limits: limitProfilePicture, fileFilter: filterProfilePicture })
+const uploadProfileBanner = multer({ storage: storage, limits: limitProfileBanner, fileFilter: filterProfileBanner })
 
 const authMiddleware = require('../middlewares/validateToken')
 const authValidation = require('../middlewares/validateAuth')
@@ -63,6 +75,7 @@ router.get('/profile-following/:followerid', authMiddleware, ProfileFollowContro
 router.delete('/profile-follow/delete', authMiddleware, ProfileFollowController.deleteProfileFollow)
 
 router.put('/upload/profile-picture', authMiddleware, uploadProfilePicture.single('profilePicture'), fileValidation.fileValidate, UploadController.uploadProfilePicture)
+router.put('/upload/profile-banner', authMiddleware, uploadProfileBanner.single('profileBanner'), fileValidation.fileValidate, UploadController.uploadProfileBanner)
 router.post('/download/:file', authMiddleware, UploadController.downloadFile)
 
 module.exports = router

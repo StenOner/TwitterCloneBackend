@@ -9,6 +9,7 @@ const controller = {
         profile.userID = body.userID
         profile.fullName = body.fullName
         profile.picture = null
+        profile.banner = null
         profile.bio = body.bio
         profile.birthDate = body.birthDate
         profile.createdAt = Date.now()

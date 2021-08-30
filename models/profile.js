@@ -14,6 +14,7 @@ const ProfileSchema = Schema({
         required: true
     },
     "picture": String,
+    "banner": String,
     "bio": {
         type: String,
         required: true
