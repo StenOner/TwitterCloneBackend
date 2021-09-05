@@ -20,7 +20,7 @@ const controller = {
             const refreshToken = new RefreshToken()
             refreshToken.token = jwtRefreshToken
             refreshToken.save((err, refreshTokenSuccess) => {
-                if (!refreshTokenSuccess) return res.status(404).send({ message: 'No se pudo generar el token para refrescar.' })
+                if (!refreshTokenSuccess) return res.status(400).send({ message: 'No se pudo generar el token para refrescar.' })
                 if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
                 return res.status(200).send({ accessToken: jwtAccessToken, refreshToken: jwtRefreshToken })
             })
@@ -38,13 +38,13 @@ const controller = {
                 const accessPayload = jwt.decode(accessToken)
                 const refreshPayload = jwt.decode(refreshToken)
                 if (accessPayload._id !== refreshPayload._id) return res.sendStatus(401)
-                User.findById(refreshPayload._id, '', { select: '_id userTypeID userName state' }, (err, userSuccess) => {
+                User.findById(refreshPayload._id, '', { select: '_id userName state' }, (err, userSuccess) => {
                     if (!userSuccess || userSuccess == '') return res.status(401).send({ message: 'Login no autorizado.' })
                     if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
                     if (!userSuccess.state) return res.status(401).send({ message: 'Usuario desactivado.' })
                     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
                         if (err) return res.sendStatus(401)
-                        const jwtAccessToken = jwt.sign({ _id: userSuccess._id, userTypeID: userSuccess.userTypeID, userName: userSuccess.userName, state: userSuccess.state }, process.env.ACCESS_TOKEN, { expiresIn: process.env.EXPIRES_IN })
+                        const jwtAccessToken = jwt.sign({ _id: userSuccess._id, userName: userSuccess.userName, state: userSuccess.state }, process.env.ACCESS_TOKEN, { expiresIn: process.env.EXPIRES_IN })
                         return res.status(200).send({ accessToken: jwtAccessToken })
                     })
                 })

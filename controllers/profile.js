@@ -35,6 +35,14 @@ const controller = {
             return res.status(200).send({ profiles: profilesSuccess })
         }).populate({ path: 'userID' })
     },
+    profileByUserID: (req, res) => {
+        const userID = req.params.id
+        Profile.findOne({ userID }, (err, profileSuccess) => {
+            if (!profileSuccess) return res.status(400).send({ message: 'No existe el perfil.' })
+            if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
+            return res.status(200).send({ profile: profileSuccess })
+        }).populate({ path: 'userID' })
+    },
     updateProfile: (req, res) => {
         const profileID = req.params.id
         const body = req.body
