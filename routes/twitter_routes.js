@@ -79,6 +79,6 @@ router.delete('/profile-follow/:id/delete', authMiddleware, ProfileFollowControl
 
 router.put('/upload/profile-picture', authMiddleware, uploadProfilePicture.single('profilePicture'), fileValidation.fileValidate, UploadController.uploadProfilePicture)
 router.put('/upload/profile-banner', authMiddleware, uploadProfileBanner.single('profileBanner'), fileValidation.fileValidate, UploadController.uploadProfileBanner)
-router.post('/download/:file', authMiddleware, UploadController.downloadFile)
+router.get('/download/:file', UploadController.downloadFile)
 
 module.exports = router
