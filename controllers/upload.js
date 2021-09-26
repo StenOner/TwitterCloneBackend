@@ -36,7 +36,7 @@ const controller = {
             if (err) return res.status(500).send({ message: 'Se encontro un error al buscar el archivo.' })
             return res.sendFile(path.resolve(filePath))
         })
-    }
+    },
 }
 
 module.exports = controller

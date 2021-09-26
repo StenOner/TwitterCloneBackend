@@ -47,7 +47,7 @@ const controller = {
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ profileFollow: profileFollowSuccess, message: 'Se dejo de seguir el perfil correctamente.' })
         })
-    }
+    },
 }
 
 module.exports = controller

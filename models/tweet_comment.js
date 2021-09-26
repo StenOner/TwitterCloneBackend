@@ -9,9 +9,9 @@ const Tweet_CommentSchema = Schema({
         ref: 'tweet',
         required: true
     },
-    "userID": {
+    "profileID": {
         type: Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'profile',
         required: true
     },
     "content": {

@@ -9,9 +9,9 @@ const Tweet_LikeSchema = Schema({
         ref: 'tweet',
         required: true
     },
-    "userID": {
+    "profileID": {
         type: Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'profile',
         required: true
     },
     "createdAt": Date,
