@@ -30,7 +30,7 @@ const controller = {
             if (!tweetLikesSuccess) return res.status(400).send({ message: 'No hay likes para este tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetLikes: tweetLikesSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
     },
     tweetLikesByProfileID: (req, res) => {
         const profileID = req.params.id
@@ -38,7 +38,7 @@ const controller = {
             if (!tweetLikesSuccess) return res.status(400).send({ message: 'No hay likes para este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetLikes: tweetLikesSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
     },
     deleteTweetLike: (req, res) => {
         const tweetLikeID = req.params.id

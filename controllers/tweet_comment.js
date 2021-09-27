@@ -31,7 +31,7 @@ const controller = {
             if (!tweetCommentsSuccess) return res.status(400).send({ message: 'No existen comentarios para este tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetComments: tweetCommentsSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
     },
     tweetCommentsByProfileID: (req, res) => {
         const profileID = req.params.id
@@ -39,7 +39,7 @@ const controller = {
             if (!tweetCommentsSuccess) return res.status(400).send({ message: 'No existen comentarios para este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetComments: tweetCommentsSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
     },
     deleteTweetComment: (req, res) => {
         const tweetCommentID = req.params.id

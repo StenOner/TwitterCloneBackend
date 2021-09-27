@@ -30,7 +30,7 @@ const controller = {
             if (!tweetRetweetsSuccess) return res.status(400).send({ message: 'No hay retweets para este tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetRetweets: tweetRetweetsSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
     },
     tweetRetweetsByProfileID: (req, res) => {
         const profileID = req.params.id
@@ -38,7 +38,7 @@ const controller = {
             if (!tweetRetweetsSuccess) return res.status(400).send({ message: 'No hay retweets para este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetRetweets: tweetRetweetsSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
     },
     deleteTweetRetweet: (req, res) => {
         const tweetRetweetID = req.params.id
