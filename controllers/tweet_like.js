@@ -11,7 +11,7 @@ const controller = {
         tweetLike.createdAt = Date.now()
         tweetLike.state = body.state
         tweetLike.save((err, tweetLikeSuccess) => {
-            if (!tweetLikeSuccess) return res.status(400).send({ message: 'No se pudo crear el tweet.' })
+            if (!tweetLikeSuccess) return res.status(400).send({ message: 'No se pudo crear el like.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetLike: tweetLikeSuccess, message: 'Like creado correctamente.' })
         })
