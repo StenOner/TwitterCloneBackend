@@ -13,7 +13,9 @@ const controller = {
         profileFollow.save((err, profileFollowSuccess) => {
             if (!profileFollowSuccess) return res.status(400).send({ message: 'No se pudo seguir el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ profileFollow: profileFollowSuccess, message: 'Se empezo a seguir el perfil correctamente.' })
+            profileFollow.populate([{ path: 'followingProfileID', select: '-userID' }, { path: 'followerProfileID', select: '-userID' }], (err, profileFollow) => {
+                return res.status(200).send({ profileFollow: profileFollow, message: 'Se empezo a seguir el perfil correctamente.' })
+            })
         })
     },
     profileFollow: (req, res) => {
@@ -22,7 +24,8 @@ const controller = {
             if (!profileFollowSuccess) return res.status(400).send({ message: 'No estas siguiendo a este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ profileFollow: profileFollowSuccess })
-        }).populate({ path: 'followingProfileID' }).populate({ path: 'followerProfileID' })
+        })
+            .populate([{ path: 'followingProfileID', select: '-userID' }, { path: 'followerProfileID', select: '-userID' }])
     },
     profileFollowers: (req, res) => {
         const followingProfileID = req.params.followingid
@@ -30,7 +33,8 @@ const controller = {
             if (!profileFollowersSuccess) return res.status(400).send({ message: 'No existen seguidores para este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ profileFollowers: profileFollowersSuccess })
-        }).populate({ path: 'followingProfileID' }).populate({ path: 'followerProfileID' })
+        })
+            .populate([{ path: 'followingProfileID', select: '-userID' }, { path: 'followerProfileID', select: '-userID' }])
     },
     profileFollowing: (req, res) => {
         const followerProfileID = req.params.followerid
@@ -38,7 +42,8 @@ const controller = {
             if (!profilesFollowingSuccess) return res.status(400).send({ message: 'No existen perfiles a los que estes siguiendo.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ profileFollowing: profilesFollowingSuccess })
-        }).populate({ path: 'followingProfileID' }).populate({ path: 'followerProfileID' })
+        })
+            .populate([{ path: 'followingProfileID', select: '-userID' }, { path: 'followerProfileID', select: '-userID' }])
     },
     deleteProfileFollow: (req, res) => {
         const profileFollowID = req.params.id

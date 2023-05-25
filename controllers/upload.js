@@ -37,7 +37,7 @@ const controller = {
         TweetMediaContent.findByIdAndUpdate(tweetMediaContentID, { content: file.filename }, { new: false }, (err, tweetMediaContentSuccess) => {
             if (!tweetMediaContentSuccess) return res.status(400).send({ message: 'No se encontro el contenido de media para el tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            console.log(`${helper.getFullTime()} - Se empezo a subir el banner de perfil ${file.filename}...`)
+            console.log(`${helper.getFullTime()} - Se empezo a subir imagen de tweet ${file.filename}...`)
             return res.status(200).send({ message: 'El contenido de media se subio exitosamente.' })
         })
     },
@@ -48,7 +48,7 @@ const controller = {
         TweetCommentMediaContent.findByIdAndUpdate(tweetCommentMediaContentID, { content: file.filename }, { new: false }, (err, tweetCommentMediaContentSuccess) => {
             if (!tweetCommentMediaContentSuccess) return res.status(400).send({ message: 'No se encontro el contenido de media para el tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            console.log(`${helper.getFullTime()} - Se empezo a subir el banner de perfil ${file.filename}...`)
+            console.log(`${helper.getFullTime()} - Se empezo a subir imagen de comentario ${file.filename}...`)
             return res.status(200).send({ message: 'El contenido de media se subio exitosamente.' })
         })
     },

@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const app = require('./app')
 const port = 3700
-const server = 'localhost'
+const server = '127.0.0.1'
 const db = 'twitter-clone'
 const mongodb = `mongodb://${server}:27017/${db}`
 

@@ -13,8 +13,8 @@ const controller = {
         user.createdAt = Date.now()
         user.state = body.state
         user.save((err, userSuccess) => {
-            if (!userSuccess) return res.status(400).send({ message: 'No se pudo crear el usuario.' })
-            if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
+            if (err && err.code == 11000) return res.status(400).send({ message: 'Correo ya existe.' })
+            if (err) return res.status(400).send({ message: 'No se pudo crear el usuario.' })
             return res.status(200).send({ user: userSuccess, message: 'Usuario creado correctamente.' })
         })
     },

@@ -15,7 +15,7 @@ const ProfileFollowSchema = Schema({
         required: true
     },
     "createdAt": Date,
-    "state": Boolean
+    "state": Boolean,
 })
 
 module.exports = mongoose.model('profile_follow', ProfileFollowSchema)

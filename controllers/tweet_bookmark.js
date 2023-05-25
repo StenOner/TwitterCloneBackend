@@ -13,7 +13,9 @@ const controller = {
         tweetBookmark.save((err, tweetBookmarkSuccess) => {
             if (!tweetBookmarkSuccess) return res.status(400).send({ message: 'No se pudo crear la marca de libro.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ tweetBookmark: tweetBookmarkSuccess, message: 'Like creado correctamente.' })
+            tweetBookmark.populate([{ path: 'tweetID' }, { path: 'profileID' }], (err, tweetBookmark) => {
+                return res.status(200).send({ tweetBookmark: tweetBookmark, message: 'Marca de libro creada correctamente.' })
+            })
         })
     },
     tweetBookmark: (req, res) => {
@@ -22,7 +24,14 @@ const controller = {
             if (!tweetBookmarkSuccess) return res.status(400).send({ message: 'No existe la marca de libro.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetBookmark: tweetBookmarkSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        })
+            .populate([{
+                path: 'tweetID', populate: [{
+                    path: 'tweetReplyOptionID',
+                }, {
+                    path: 'profileID'
+                }]
+            }, { path: 'profileID' }])
     },
     tweetBookmarksByTweetID: (req, res) => {
         const tweetID = req.params.id
@@ -30,7 +39,15 @@ const controller = {
             if (!tweetBookmarksSuccess) return res.status(400).send({ message: 'No hay marcas de libro para este tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetBookmarks: tweetBookmarksSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
+        })
+            .populate([{
+                path: 'tweetID', populate: [{
+                    path: 'tweetReplyOptionID',
+                }, {
+                    path: 'profileID'
+                }]
+            }, { path: 'profileID' }])
+            .sort({ createdAt: 'desc' })
     },
     tweetBookmarksByProfileID: (req, res) => {
         const profileID = req.params.id
@@ -38,7 +55,15 @@ const controller = {
             if (!tweetBookmarksSuccess) return res.status(400).send({ message: 'No hay marcas de libro para este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetBookmarks: tweetBookmarksSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
+        })
+            .populate([{
+                path: 'tweetID', populate: [{
+                    path: 'tweetReplyOptionID',
+                }, {
+                    path: 'profileID'
+                }]
+            }, { path: 'profileID' }])
+            .sort({ createdAt: 'desc' })
     },
     deleteTweetBookmark: (req, res) => {
         const tweetBookmarkID = req.params.id

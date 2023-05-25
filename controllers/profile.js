@@ -17,7 +17,9 @@ const controller = {
         profile.save((err, profileSuccess) => {
             if (!profileSuccess) return res.status(400).send({ message: 'No se pudo crear el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ profile: profileSuccess, message: 'Perfil creado correctamente.' })
+            profile.populate({ path: 'userID' }, (err, profile) => {
+                return res.status(200).send({ profile: profile, message: 'Perfil creado correctamente.' })
+            })
         })
     },
     profile: (req, res) => {
@@ -26,14 +28,16 @@ const controller = {
             if (!profileSuccess) return res.status(400).send({ message: 'No existe el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ profile: profileSuccess })
-        }).populate({ path: 'userID' })
+        })
+            .populate({ path: 'userID' })
     },
     profiles: (req, res) => {
         Profile.find({}, (err, profilesSuccess) => {
             if (!profilesSuccess) return res.status(400).send({ message: 'No hay perfiles.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ profiles: profilesSuccess })
-        }).populate({ path: 'userID' })
+        })
+            .populate({ path: 'userID' })
     },
     profileByUserID: (req, res) => {
         const userID = req.params.id
@@ -41,7 +45,8 @@ const controller = {
             if (!profileSuccess) return res.status(400).send({ message: 'No existe el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ profile: profileSuccess })
-        }).populate({ path: 'userID' })
+        })
+            .populate({ path: 'userID' })
     },
     updateProfile: (req, res) => {
         const profileID = req.params.id
@@ -56,7 +61,8 @@ const controller = {
             if (!profileSuccess) return res.status(400).send({ message: 'No existe el perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ profile: profileSuccess, message: 'Perfil actualizado correctamente.' })
-        }).populate({ path: 'userID' })
+        })
+            .populate({ path: 'userID' })
     },
     deleteProfile: (req, res) => {
         const profileID = req.params.id

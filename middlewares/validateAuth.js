@@ -9,8 +9,8 @@ const authValidation = {
     },
     refreshValidate: (req, res, next) => {
         const body = req.body
-        if (!body.accessToken) return res.status(422).send({ message: 'No se recivio ningun token de acceso.' })
-        if (!body.refreshToken) return res.status(422).send({ message: 'No se recivio ningun token de recarga.' })
+        if (!body.accessToken) return res.status(422).send({ message: 'No se recibio ningun token de acceso.' })
+        if (!body.refreshToken) return res.status(422).send({ message: 'No se recibio ningun token de recarga.' })
         next()
     }
 }

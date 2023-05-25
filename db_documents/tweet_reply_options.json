@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "6414e54d7cacc00a2a277415"
+  },
+  "content": "Everyone",
+  "createdAt": {
+    "$date": "2023-03-10T19:43:30.392Z"
+  },
+  "state": true,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6414e5517cacc00a2a277416"
+  },
+  "content": "People you follow",
+  "createdAt": {
+    "$date": "2023-03-10T19:43:30.392Z"
+  },
+  "state": true,
+  "__v": 0
+}]

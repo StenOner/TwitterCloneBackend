@@ -13,7 +13,9 @@ const controller = {
         tweetLike.save((err, tweetLikeSuccess) => {
             if (!tweetLikeSuccess) return res.status(400).send({ message: 'No se pudo crear el like.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ tweetLike: tweetLikeSuccess, message: 'Like creado correctamente.' })
+            tweetLike.populate([{ path: 'tweetID' }, { path: 'profileID' }], (err, tweetLike) => {
+                return res.status(200).send({ tweetLike: tweetLike, message: 'Like creado correctamente.' })
+            })
         })
     },
     tweetLike: (req, res) => {
@@ -22,7 +24,8 @@ const controller = {
             if (!tweetLikeSuccess) return res.status(400).send({ message: 'No existe el like.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetLike: tweetLikeSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
     },
     tweetLikesByTweetID: (req, res) => {
         const tweetID = req.params.id
@@ -30,7 +33,9 @@ const controller = {
             if (!tweetLikesSuccess) return res.status(400).send({ message: 'No hay likes para este tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetLikes: tweetLikesSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
+            .sort({ createdAt: 'desc' })
     },
     tweetLikesByProfileID: (req, res) => {
         const profileID = req.params.id
@@ -38,7 +43,9 @@ const controller = {
             if (!tweetLikesSuccess) return res.status(400).send({ message: 'No hay likes para este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetLikes: tweetLikesSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
+            .sort({ createdAt: 'desc' })
     },
     deleteTweetLike: (req, res) => {
         const tweetLikeID = req.params.id

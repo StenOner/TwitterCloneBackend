@@ -9,6 +9,11 @@ const TweetSchema = Schema({
         ref: 'profile',
         required: true
     },
+    "tweetReplyOptionID": {
+        type: Schema.Types.ObjectId,
+        ref: 'tweet_reply_option',
+        required: true
+    },
     "content": {
         type: String,
         required: true

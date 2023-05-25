@@ -3,7 +3,7 @@
 const fileValidation = {
     fileValidate: (req, res, next) => {
         const file = req.file
-        if (!file) return res.status(422).send({ message: 'El archivo no existe en el servidor.' })
+        if (!file) return res.status(422).send({ message: 'El archivo no existe.' })
         next()
     },
     profileValidate: (req, res, next) => {

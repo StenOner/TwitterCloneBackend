@@ -1,7 +1,7 @@
 'use strict'
 
 const User = require('../models/user')
-const RefreshToken = require('../models/refresh-token')
+const RefreshToken = require('../models/refresh_token')
 const sha256 = require('crypto-js/sha256')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()

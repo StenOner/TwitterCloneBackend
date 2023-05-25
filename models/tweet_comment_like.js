@@ -3,10 +3,10 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const TweetRetweetSchema = Schema({
-    "tweetID": {
+const TweetCommentLikeSchema = Schema({
+    "tweetCommentID": {
         type: Schema.Types.ObjectId,
-        ref: 'tweet',
+        ref: 'tweet_comment',
         required: true
     },
     "profileID": {
@@ -18,4 +18,4 @@ const TweetRetweetSchema = Schema({
     "state": Boolean
 })
 
-module.exports = mongoose.model('tweet_retweet', TweetRetweetSchema)
+module.exports = mongoose.model('tweet_comment_like', TweetCommentLikeSchema)

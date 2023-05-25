@@ -13,7 +13,9 @@ const controller = {
         tweetCommentMediacontent.save((err, tweetCommentMediacontentSuccess) => {
             if (!tweetCommentMediacontentSuccess) return res.status(400).send({ message: 'No se pudo crear contenido de media para el tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ tweetCommentMediacontent: tweetCommentMediacontentSuccess, message: 'Contenido de media creado correctamente.' })
+            tweetCommentMediacontent.populate({ path: 'tweetID' }, (err, tweetCommentMediacontent) => {
+                return res.status(200).send({ tweetCommentMediacontent: tweetCommentMediacontent, message: 'Contenido de media creado correctamente.' })
+            })
         })
     },
     tweetCommentMediacontent: (req, res) => {
@@ -22,7 +24,8 @@ const controller = {
             if (!tweetCommentMediacontentSuccess) return res.status(400).send({ message: 'No existe contenido de media.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetCommentMediacontent: tweetCommentMediacontentSuccess })
-        }).populate({ path: 'tweetID' })
+        })
+            .populate({ path: 'tweetID' })
     },
     tweetCommentMediacontentsByTweetCommentID: (req, res) => {
         const tweetCommentID = req.params.id
@@ -30,7 +33,8 @@ const controller = {
             if (!tweetCommentMediacontentsSuccess) return res.status(400).send({ message: 'No hay contenidos de media para este tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetCommentMediacontents: tweetCommentMediacontentsSuccess })
-        }).populate({ path: 'tweetID' })
+        })
+            .populate({ path: 'tweetID' })
     },
     deleteTweetCommentMediacontent: (req, res) => {
         const tweetCommentMediacontentID = req.params.id

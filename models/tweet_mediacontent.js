@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const Tweet_MediaContentSchema = Schema({
+const TweetMediaContentSchema = Schema({
     "tweetID": {
         type: Schema.Types.ObjectId,
         ref: 'tweet',
@@ -14,4 +14,4 @@ const Tweet_MediaContentSchema = Schema({
     "state": Boolean
 })
 
-module.exports = mongoose.model('tweet_mediacontent', Tweet_MediaContentSchema)
+module.exports = mongoose.model('tweet_mediacontent', TweetMediaContentSchema)

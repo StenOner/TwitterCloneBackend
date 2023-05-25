@@ -13,7 +13,9 @@ const controller = {
         tweetRetweet.save((err, tweetRetweetSuccess) => {
             if (!tweetRetweetSuccess) return res.status(400).send({ message: 'No se pudo crear el retweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ tweetRetweet: tweetRetweetSuccess, message: 'Retweet creado correctamente.' })
+            tweetRetweet.populate([{ path: 'tweetID' }, { path: 'profileID' }], (err, tweetRetweet) => {
+                return res.status(200).send({ tweetRetweet: tweetRetweet, message: 'Retweet creado correctamente.' })
+            })
         })
     },
     tweetRetweet: (req, res) => {
@@ -22,7 +24,8 @@ const controller = {
             if (!tweetRetweetSuccess) return res.status(400).send({ message: 'No existe el retweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetRetweet: tweetRetweetSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
     },
     tweetRetweetsByTweetID: (req, res) => {
         const tweetID = req.params.id
@@ -30,7 +33,9 @@ const controller = {
             if (!tweetRetweetsSuccess) return res.status(400).send({ message: 'No hay retweets para este tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetRetweets: tweetRetweetsSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
+            .sort({ createdAt: 'desc' })
     },
     tweetRetweetsByProfileID: (req, res) => {
         const profileID = req.params.id
@@ -38,7 +43,9 @@ const controller = {
             if (!tweetRetweetsSuccess) return res.status(400).send({ message: 'No hay retweets para este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetRetweets: tweetRetweetsSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
+            .sort({ createdAt: 'desc' })
     },
     deleteTweetRetweet: (req, res) => {
         const tweetRetweetID = req.params.id

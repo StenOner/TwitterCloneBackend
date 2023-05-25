@@ -14,7 +14,9 @@ const controller = {
         tweetComment.save((err, tweetCommentSuccess) => {
             if (!tweetCommentSuccess) return res.status(400).send({ message: 'No se pudo crear el comentario.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ tweetComment: tweetCommentSuccess, message: 'Comentario creado correctamente.' })
+            tweetComment.populate([{ path: 'tweetID' }, { path: 'profileID' }], (err, tweetComment) => {
+                return res.status(200).send({ tweetComment: tweetComment, message: 'Comentario creado correctamente.' })
+            })
         })
     },
     tweetComment: (req, res) => {
@@ -23,7 +25,8 @@ const controller = {
             if (!tweetCommentSuccess) return res.status(400).send({ message: 'No existe el comentario.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetComment: tweetCommentSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
     },
     tweetCommentsByTweetID: (req, res) => {
         const tweetID = req.params.id
@@ -31,7 +34,9 @@ const controller = {
             if (!tweetCommentsSuccess) return res.status(400).send({ message: 'No existen comentarios para este tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetComments: tweetCommentsSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
+            .sort({ createdAt: 'desc' })
     },
     tweetCommentsByProfileID: (req, res) => {
         const profileID = req.params.id
@@ -39,7 +44,9 @@ const controller = {
             if (!tweetCommentsSuccess) return res.status(400).send({ message: 'No existen comentarios para este perfil.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             return res.status(200).send({ tweetComments: tweetCommentsSuccess })
-        }).populate({ path: 'tweetID' }).populate({ path: 'profileID' }).sort({ createdAt: 'desc' })
+        })
+            .populate([{ path: 'tweetID' }, { path: 'profileID' }])
+            .sort({ createdAt: 'desc' })
     },
     deleteTweetComment: (req, res) => {
         const tweetCommentID = req.params.id

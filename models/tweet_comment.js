@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const Tweet_CommentSchema = Schema({
+const TweetCommentSchema = Schema({
     "tweetID": {
         type: Schema.Types.ObjectId,
         ref: 'tweet',
@@ -22,4 +22,4 @@ const Tweet_CommentSchema = Schema({
     "state": Boolean
 })
 
-module.exports = mongoose.model('tweet_comment', Tweet_CommentSchema)
+module.exports = mongoose.model('tweet_comment', TweetCommentSchema)
