@@ -37,6 +37,7 @@ const controller = {
             .exec()
         const tweetInfo = {
             tweetID: tweet._id,
+            createdAt: tweet.createdAt,
             profleID: tweet.profileID,
             tweetReplyOptionID: tweet.tweetReplyOptionID,
             bookmarks,
@@ -80,6 +81,7 @@ const controller = {
                     .exec()
                 return {
                     tweetID: tweet._id,
+                    createdAt: tweet.createdAt,
                     profileID: tweet.profileID,
                     tweetReplyOptionID: tweet.tweetReplyOptionID,
                     content: tweet.content,
