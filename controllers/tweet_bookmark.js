@@ -1,6 +1,7 @@
 'use strict'
 
 const TweetBookmark = require('../models/tweet_bookmark')
+const { getTweetInfo } = require('../utils/tweet-info')
 
 const controller = {
     newTweetBookmark: (req, res) => {
@@ -49,13 +50,9 @@ const controller = {
             }, { path: 'profileID' }])
             .sort({ createdAt: 'desc' })
     },
-    tweetBookmarksByProfileID: (req, res) => {
+    tweetBookmarksByProfileID: async (req, res) => {
         const profileID = req.params.id
-        TweetBookmark.find({ profileID }, (err, tweetBookmarksSuccess) => {
-            if (!tweetBookmarksSuccess) return res.status(400).send({ message: 'No hay marcas de libro para este perfil.' })
-            if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ tweetBookmarks: tweetBookmarksSuccess })
-        })
+        const tweetBookmarks = await TweetBookmark.find({ profileID })
             .populate([{
                 path: 'tweetID', populate: [{
                     path: 'tweetReplyOptionID',
@@ -64,6 +61,13 @@ const controller = {
                 }]
             }, { path: 'profileID' }])
             .sort({ createdAt: 'desc' })
+            .exec()
+        const tweetsInfo = await Promise.all(
+            tweetBookmarks.map(async (tweetBookmark) => {
+                return await getTweetInfo(tweetBookmark.tweetID)
+            })
+        )
+        return res.status(200).send({ tweetsInfo })
     },
     deleteTweetBookmark: (req, res) => {
         const tweetBookmarkID = req.params.id

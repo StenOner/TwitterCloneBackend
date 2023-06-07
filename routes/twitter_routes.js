@@ -167,12 +167,9 @@ router.get('/tweets-mentions/tweets/:id', authMiddleware, TweetMentionController
 router.delete('/tweets-mentions/:id', authMiddleware, TweetMentionController.deleteTweetMention)
 router.delete('/tweets-mentions/tweets/:id', authMiddleware, TweetMentionController.deleteTweetMentionsByTweetID)
 
-router.post('/tweets-trends', authMiddleware, TweetTrendController.newTweetTrend)
 router.get('/tweets-trends/:id', authMiddleware, TweetTrendController.TweetTrend)
-router.get('/tweets-trends', authMiddleware, TweetTrendController.TweetTrends)
-router.get('/tweets-trends/tweets/:id', authMiddleware, TweetTrendController.TweetTrendsByTweetID)
+router.get('/tweets-trending', authMiddleware, TweetTrendController.TweetTrending)
 router.delete('/tweets-trends/:id', authMiddleware, TweetTrendController.deleteTweetTrend)
-router.delete('/tweets-trends/tweets/:id', authMiddleware, TweetTrendController.deleteTweetTrendsByTweetID)
 
 router.post('/tweets-retweets', authMiddleware, TweetRetweetController.newTweetRetweet)
 router.get('/tweets-retweets/:id', authMiddleware, TweetRetweetController.tweetRetweet)

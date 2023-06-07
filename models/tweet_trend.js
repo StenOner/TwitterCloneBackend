@@ -4,15 +4,16 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const TweetTrendSchema = Schema({
-    "tweetID": {
-        type: Schema.Types.ObjectId,
-        ref: 'tweet',
-        required: true
+    "trend": {
+        type: String,
+        required: true,
+        unique: true,
     },
-    "trends": [{
-        "trend": {
-            type: String,
-            required: true
+    "tweets": [{
+        "tweetID": {
+            type: Schema.Types.ObjectId,
+            ref: 'tweet',
+            required: true,
         }
     }],
     "createdAt": Date,

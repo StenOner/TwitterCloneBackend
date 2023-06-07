@@ -2,6 +2,7 @@
 
 const Tweet = require('../models/tweet')
 const ProfileFollow = require('../models/profile_follow')
+const { handleTrends } = require('../utils/trend')
 
 const controller = {
     newTweet: (req, res) => {
@@ -16,6 +17,7 @@ const controller = {
             if (!tweetSuccess) return res.status(400).send({ message: 'No se pudo crear el tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
             tweet.populate([{ path: 'profileID' }, { path: 'tweetReplyOptionID' }], (err, tweet) => {
+                handleTrends(tweet.content, tweet._id)
                 return res.status(200).send({ tweet: tweet, message: 'Tweet creado correctamente.' })
             })
         })
