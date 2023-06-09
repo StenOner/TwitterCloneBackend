@@ -6,43 +6,36 @@ const listTrendsFromContent = (content) => {
     return content.split(' ').filter((word) => /^#(\w|\d)+$/g.test(word))
 }
 
-const newTweetTrend = ({ trend, tweetID }) => {
-    console.log('newTweetTrend', trend, tweetID);
-    const tweetTrend = new TweetTrend()
-    tweetTrend.trend = trend
-    tweetTrend.tweets = [{ tweetID }]
-    tweetTrend.createdAt = Date.now()
-    tweetTrend.state = true
-    tweetTrend.save((err, tweetTrendSuccess) => {
-        if (!tweetTrendSuccess) return { message: 'No se pudo crear el trend.' }
-        if (err) return { message: 'No se pudo resolver la peticion.' }
-        tweetTrend.populate([{ path: 'tweets' }], (err, tweetTrend) => {
-            return { tweetTrend: tweetTrend, message: 'Trend creado correctamente.' }
-        })
+const generateBulkWrite = (tweetID, newTrends, currentTrends) => {
+    return Array.from(new Set(newTrends)).map((newTrend) => {
+        if (currentTrends.some(({ trend }) => trend === newTrend)) {
+            return {
+                updateOne: {
+                    filter: { trend: newTrend, 'tweets.tweetID': { $ne: tweetID } },
+                    update: { $push: { tweets: { tweetID } } },
+                },
+            }
+        }
+        return {
+            insertOne: {
+                document: {
+                    trend: newTrend,
+                    tweets: [{ tweetID }],
+                    createdAt: Date.now(),
+                    state: true,
+                },
+            },
+        }
     })
-}
-
-const updateTweetTrend = ({ trend, tweetID }) => {
-    TweetTrend.updateOne({ trend, 'tweets.tweetID': { $ne: tweetID } }, { $push: { tweets: { tweetID } } }, { runValidators: true }, (err, tweetTrendSuccess) => {
-        console.log('updateTweetTrend', trend, tweetID);
-        if (!tweetTrendSuccess) return { message: 'No se pudo actualizar el trend.' }
-        if (err) return { message: 'No se pudo resolver la peticion.' }
-        return { tweetTrend: tweetTrendSuccess }
-    })
-        .populate([{ path: 'tweets' }])
 }
 
 exports.handleTrends = async function (content, tweetID) {
     const newTrends = listTrendsFromContent(content)
-    console.log(newTrends);
+    if (!newTrends || newTrends.length < 1) return console.log('No existen trends a insertar.')
     const trends = await TweetTrend.find({})
         .exec()
-    newTrends.forEach((newTrend) => {
-        const newTrendBody = {
-            trend: newTrend,
-            tweetID,
-        }
-        if (trends.some(({ trend }) => trend === newTrend)) return updateTweetTrend(newTrendBody)
-        return newTweetTrend(newTrendBody)
+    const bulkWrites = generateBulkWrite(tweetID, newTrends, trends)
+    TweetTrend.bulkWrite(bulkWrites).then((res) => {
+        console.log(res)
     })
 }
