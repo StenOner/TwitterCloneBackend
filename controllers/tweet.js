@@ -3,6 +3,7 @@
 const Tweet = require('../models/tweet')
 const ProfileFollow = require('../models/profile_follow')
 const { handleTrends } = require('../utils/trend')
+const { getTweetInfo } = require('../utils/tweet-info')
 
 const controller = {
     newTweet: (req, res) => {
@@ -31,14 +32,18 @@ const controller = {
         })
             .populate([{ path: 'profileID' }, { path: 'tweetReplyOptionID' }])
     },
-    tweets: (req, res) => {
-        Tweet.find({}, (err, tweetsSuccess) => {
-            if (!tweetsSuccess) return res.status(400).send({ message: 'No hay tweets.' })
-            if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            return res.status(200).send({ tweets: tweetsSuccess })
-        })
+    tweets: async (req, res) => {
+        const tweets = await Tweet.find({})
             .populate([{ path: 'profileID' }, { path: 'tweetReplyOptionID' }])
             .sort({ createdAt: 'desc' })
+            .limit(100)
+            .exec()
+        const tweetsInfo = await Promise.all(
+            tweets.map(async (tweet) => {
+                return await getTweetInfo(tweet)
+            })
+        )
+        return res.status(200).send({ tweetsInfo })
     },
     tweetsByProfileID: (req, res) => {
         const profileID = req.params.id

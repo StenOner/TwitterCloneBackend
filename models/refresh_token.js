@@ -9,4 +9,4 @@ const RefreshTokenSchema = Schema({
     "state": Boolean
 })
 
-module.exports = mongoose.model('refreshtoken', RefreshTokenSchema)
+module.exports = mongoose.model('refresh_token', RefreshTokenSchema)
