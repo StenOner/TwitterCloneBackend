@@ -14,13 +14,14 @@ const controller = {
         tweet.content = body.content
         tweet.createdAt = Date.now()
         tweet.state = body.state
-        tweet.save((err, tweetSuccess) => {
+        tweet.save(async (err, tweetSuccess) => {
             if (!tweetSuccess) return res.status(400).send({ message: 'No se pudo crear el tweet.' })
             if (err) return res.status(500).send({ message: 'No se pudo resolver la peticion.' })
-            tweet.populate([{ path: 'profileID' }, { path: 'tweetReplyOptionID' }], (err, tweet) => {
-                handleTrends(tweet.content, tweet._id)
-                return res.status(200).send({ tweet: tweet, message: 'Tweet creado correctamente.' })
-            })
+            const newTweet = await tweetSuccess.populate([{ path: 'profileID' }, { path: 'tweetReplyOptionID' }])
+                .execPopulate()
+            const tweetInfo = await getTweetInfo(newTweet)
+            handleTrends(newTweet.content, newTweet._id)
+            return res.status(200).send({ tweet: tweetInfo, message: 'Tweet creado correctamente.' })
         })
     },
     tweet: (req, res) => {
