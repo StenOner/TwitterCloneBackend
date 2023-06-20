@@ -21,6 +21,7 @@ exports.getTweetInfo = async function (tweet) {
         .exec()
     const comments = await TweetComment.find({ tweetID: tweet._id })
         .populate([{ path: 'tweetID' }, { path: 'profileID' }])
+        .sort({ createdAt: 'desc' })
         .exec()
     const commentsInfo = await Promise.all(
         comments.map(async (comment) => {
@@ -28,7 +29,6 @@ exports.getTweetInfo = async function (tweet) {
                 .exec()
             const commentLikes = await TweetCommentLike.find({ tweetCommentID: comment._id })
                 .populate([{ path: 'tweetCommentID' }, { path: 'profileID' }])
-                .sort({ createdAt: 'desc' })
                 .exec()
             return {
                 ...comment._doc,
