@@ -6,8 +6,9 @@ const app = require('./app')
 const port = 3700
 const user = process.env.MONGO_USER
 const password = process.env.MONGO_PASSWORD
+const server = process.env.MONGO_SERVER
 const database = process.env.MONGO_DATABASE
-const mongo_connectionstring = `mongodb+srv://${user}:${password}@cluster0.ikegkll.mongodb.net/${database}`
+const mongo_connectionstring = `mongodb+srv://${user}:${password}@${server}/${database}`
 
 mongoose.set('useNewUrlParser', true)
 mongoose.set('useFindAndModify', false)
