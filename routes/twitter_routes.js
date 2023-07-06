@@ -20,57 +20,6 @@ const TweetInfoController = require('../controllers/tweet_info')
 const UploadController = require('../controllers/upload')
 const WhotToFollowController = require('../controllers/who_to_follow')
 const router = express.Router()
-const multer = require('multer')
-
-const imageExtensions = ['jpeg', 'jpg', 'png', 'gif', 'webp']
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './tmp')
-    },
-    filename: (req, file, cb) => {
-        const name = file.originalname
-        const index = name.lastIndexOf('.')
-        const fileExt = index > 0 ? name.substring(index) : ''
-        cb(null, `${Date.now()}${fileExt}`)
-    }
-})
-const filterProfilePicture = (req, file, cb) => {
-    const acceptedExtensions = imageExtensions
-    const name = file.originalname
-    const index = name.lastIndexOf('.')
-    const fileExt = index > 0 ? name.substring(index + 1) : ''
-    if (!acceptedExtensions.includes(fileExt.toLowerCase())) cb('La extension no es soportada.')
-    cb(null, true)
-}
-const limitProfilePicture = {
-    fileSize: 5 * 1024 * 1024
-}
-const filterProfileBanner = (req, file, cb) => {
-    const acceptedExtensions = imageExtensions
-    const name = file.originalname
-    const index = name.lastIndexOf('.')
-    const fileExt = index > 0 ? name.substring(index + 1) : ''
-    if (!acceptedExtensions.includes(fileExt.toLowerCase())) cb('La extension no es soportada.')
-    cb(null, true)
-}
-const limitProfileBanner = {
-    fileSize: 20 * 1024 * 1024
-}
-const filterMediaContent = (req, file, cb) => {
-    const acceptedExtensions = imageExtensions
-    const name = file.originalname
-    const index = name.lastIndexOf('.')
-    const fileExt = index > 0 ? name.substring(index + 1) : ''
-    if (!acceptedExtensions.includes(fileExt.toLowerCase())) cb('La extension no es soportada.')
-    cb(null, true)
-}
-const limitMediaContent = {
-    fileSize: 10 * 1024 * 1024
-}
-const uploadProfilePicture = multer({ storage: storage, limits: limitProfilePicture, fileFilter: filterProfilePicture })
-const uploadProfileBanner = multer({ storage: storage, limits: limitProfileBanner, fileFilter: filterProfileBanner })
-const uploadMediaContent = multer({ storage: storage, limits: limitMediaContent, fileFilter: filterMediaContent })
 
 const authMiddleware = require('../middlewares/validateToken')
 const authValidation = require('../middlewares/validateAuth')
@@ -79,6 +28,7 @@ const profileValidation = require('../middlewares/validateProfile')
 const profileFollowValidation = require('../middlewares/validateProfileFollow')
 const tweetValidation = require('../middlewares/validateTweet')
 const fileValidation = require('../middlewares/validateFile')
+const uploadFileValidation = require('../middlewares/validateFileUpload')
 
 router.post('/auth', authValidation.authValidate, AuthController.auth)
 router.post('/auth/refresh', authValidation.refreshValidate, AuthController.refreshToken)
@@ -182,11 +132,11 @@ router.delete('/tweets-retweets/profiles/:id', authMiddleware, TweetRetweetContr
 router.get('/tweets-info/tweets/:id', authMiddleware, TweetInfoController.tweetGeneralInformation)
 router.get('/tweets-info/tweets/profiles-following/:id', authMiddleware, TweetInfoController.followingTweetsGeneralInformationByProfileID)
 router.get('/who-to-follow/:id', authMiddleware, WhotToFollowController.whoToFollow)
-
-router.put('/upload/profile-banner', authMiddleware, uploadProfileBanner.single('profileBanner'), fileValidation.fileValidate, fileValidation.profileValidate, UploadController.uploadProfileBanner)
-router.put('/upload/profile-picture', authMiddleware, uploadProfilePicture.single('profilePicture'), fileValidation.fileValidate, fileValidation.profileValidate, UploadController.uploadProfilePicture)
-router.put('/upload/tweet-image', authMiddleware, uploadMediaContent.single('tweetImage'), fileValidation.fileValidate, fileValidation.tweetMediaContentValidate, UploadController.uploadTweetImage)
-router.put('/upload/comment-image', authMiddleware, uploadMediaContent.single('commentImage'), fileValidation.fileValidate, fileValidation.tweetCommentMediaContentValidate, UploadController.uploadTweetCommentImage)
 router.get('/download/:file', UploadController.downloadFile)
+
+router.put('/upload/profile-banner', authMiddleware, uploadFileValidation.uploadSingleProfileBanner, fileValidation.fileValidate, fileValidation.profileValidate, UploadController.uploadProfileBanner)
+router.put('/upload/profile-picture', authMiddleware, uploadFileValidation.uploadSingleProfilePicture, fileValidation.fileValidate, fileValidation.profileValidate, UploadController.uploadProfilePicture)
+router.put('/upload/tweet-image', authMiddleware, uploadFileValidation.uploadSingleTweetImage, fileValidation.fileValidate, fileValidation.tweetMediaContentValidate, UploadController.uploadTweetImage)
+router.put('/upload/comment-image', authMiddleware, uploadFileValidation.uploadSingleCommentImage, fileValidation.fileValidate, fileValidation.tweetCommentMediaContentValidate, UploadController.uploadTweetCommentImage)
 
 module.exports = router
