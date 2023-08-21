@@ -5,10 +5,11 @@ const fs = require('fs')
 const multer = require('multer')
 const { v2: cloudinary, v2: { uploader } } = require('cloudinary')
 const streamifier = require('streamifier')
+const localUploadFolder = './public'
 
 let canWrite = false
 try {
-    fs.accessSync('./tmp', fs.constants.W_OK)
+    fs.accessSync(localUploadFolder, fs.constants.W_OK)
     canWrite = true
 }
 catch (err) {
@@ -23,7 +24,7 @@ cloudinary.config({
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './tmp')
+        cb(null, localUploadFolder)
     },
     filename: (req, file, cb) => {
         const name = file.originalname

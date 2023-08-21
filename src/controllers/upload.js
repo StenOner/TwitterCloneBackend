@@ -54,7 +54,7 @@ const controller = {
     },
     downloadFile: (req, res) => {
         const fileName = req.params.file
-        const filePath = `./tmp/${fileName}`
+        const filePath = `./public/${fileName}`
         fs.stat(filePath, (err, stats) => {
             if (!stats) return res.status(400).send({ message: 'No existe el archivo.' })
             if (err) return res.status(500).send({ message: 'Se encontro un error al buscar el archivo.' })
