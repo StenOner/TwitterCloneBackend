@@ -2,7 +2,7 @@
 
 const express = require('express')
 const app = express()
-const routes = require('./routes/twitter_routes')
+const routes = require('./src/routes/twitter_routes')
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())

@@ -3,7 +3,7 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
 const app = require('./app')
-const port = 3700
+const port = process.env.PORT
 const user = process.env.MONGO_USER
 const password = process.env.MONGO_PASSWORD
 const server = process.env.MONGO_SERVER
