@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const RefreshTokenSchema = Schema({
+const RefreshTokenSchema = new Schema({
     "token": String,
     "createdAt": Date,
     "state": Boolean

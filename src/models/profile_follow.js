@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const ProfileFollowSchema = Schema({
+const ProfileFollowSchema = new Schema({
     "followingProfileID": {
         type: Schema.Types.ObjectId,
         ref: 'profile',

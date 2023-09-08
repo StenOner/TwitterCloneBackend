@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const TweetBookmarkSchema = Schema({
+const TweetBookmarkSchema = new Schema({
     "tweetID": {
         type: Schema.Types.ObjectId,
         ref: 'tweet',

@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const TweetTrendSchema = Schema({
+const TweetTrendSchema = new Schema({
     "trend": {
         type: String,
         required: true,

@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const TweetMediaContentSchema = Schema({
+const TweetMediaContentSchema = new Schema({
     "tweetID": {
         type: Schema.Types.ObjectId,
         ref: 'tweet',
